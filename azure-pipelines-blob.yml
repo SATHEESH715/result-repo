@@ -1,0 +1,53 @@
+# Approach 2: the report is built from the result files that the project repos upload to blob storage.
+# Blob storage cannot start a pipeline by itself, so this runs on a schedule and can be run by hand.
+trigger: none
+pr: none
+
+schedules:
+  - cron: '0 2 * * 1-5'
+    displayName: Weekdays 2AM (UTC)
+    branches:
+      include:
+        - main
+    always: true
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  - group: test-reporting          # holds the secret variable teamsWorkflowUrl
+  - name: storageAccount
+    value: testreportsatheesh01
+  - name: container
+    value: test-results
+  - name: azureServiceConnection
+    value: azure-test-reporting    # the name of your Azure service connection
+
+steps:
+  - checkout: self
+
+  - task: NodeTool@0
+    displayName: Use Node 22
+    inputs:
+      versionSpec: '22.x'
+
+  - task: AzureCLI@2
+    displayName: Download the result files from blob storage
+    inputs:
+      azureSubscription: $(azureServiceConnection)
+      scriptType: bash
+      scriptLocation: inlineScript
+      inlineScript: |
+        mkdir -p blob-results
+        az storage blob download-batch \
+          --account-name "$(storageAccount)" \
+          --source "$(container)" \
+          --destination blob-results \
+          --pattern "*/summary.json" \
+          --auth-mode login
+
+  - script: node scripts/post-report.mjs blob-results
+    displayName: Post one report to Teams (from blob storage)
+    env:
+      TEAMS_WORKFLOW_URL: $(teamsWorkflowUrl)
+      SOURCE_LABEL: blob storage

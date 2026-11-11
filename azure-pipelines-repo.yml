@@ -1,0 +1,40 @@
+# Approach 1: the report is built from the result files that the project repos push into this repo.
+# Runs whenever a project pushes new results.
+trigger:
+  batch: true            # if both projects push close together, build one report, not two
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - project1/*
+      - project2/*
+
+pr: none
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  - group: test-reporting   # holds the secret variable teamsWorkflowUrl
+
+steps:
+  - checkout: self
+
+  - task: NodeTool@0
+    displayName: Use Node 22
+    inputs:
+      versionSpec: '22.x'
+
+  - script: sleep 45
+    displayName: Wait briefly so the other project's push can land
+
+  - script: |
+      # Read the newest results, which may include the other project's push. The repo is public, so no sign-in is needed.
+      git fetch --depth 1 https://github.com/SATHEESH715/result-repo.git main
+      git checkout -q FETCH_HEAD
+      node scripts/post-report.mjs .
+    displayName: Post one report to Teams (from result-repo)
+    env:
+      TEAMS_WORKFLOW_URL: $(teamsWorkflowUrl)
+      SOURCE_LABEL: result-repo
