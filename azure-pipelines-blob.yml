@@ -11,8 +11,10 @@ schedules:
         - main
     always: true
 
+# Runs on the self-hosted agent in the Default pool (Windows). To use Microsoft-hosted agents instead,
+# once the free grant is approved, replace this with:  vmImage: ubuntu-latest
 pool:
-  vmImage: ubuntu-latest
+  name: Default
 
 variables:
   - group: test-reporting          # holds the secret variable teamsWorkflowUrl
@@ -25,6 +27,7 @@ variables:
 
 steps:
   - checkout: self
+    clean: true
 
   - task: NodeTool@0
     displayName: Use Node 22
@@ -35,16 +38,11 @@ steps:
     displayName: Download the result files from blob storage
     inputs:
       azureSubscription: $(azureServiceConnection)
-      scriptType: bash
+      scriptType: ps
       scriptLocation: inlineScript
       inlineScript: |
-        mkdir -p blob-results
-        az storage blob download-batch \
-          --account-name "$(storageAccount)" \
-          --source "$(container)" \
-          --destination blob-results \
-          --pattern "*/summary.json" \
-          --auth-mode login
+        New-Item -ItemType Directory -Force -Path blob-results | Out-Null
+        az storage blob download-batch --account-name "$(storageAccount)" --source "$(container)" --destination blob-results --pattern "*/summary.json" --auth-mode login
 
   - script: node scripts/post-report.mjs blob-results
     displayName: Post one report to Teams (from blob storage)

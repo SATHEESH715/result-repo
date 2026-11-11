@@ -12,28 +12,35 @@ trigger:
 
 pr: none
 
+# Runs on the self-hosted agent in the Default pool (Windows). To use Microsoft-hosted agents instead,
+# once the free grant is approved, replace this with:  vmImage: ubuntu-latest
 pool:
-  vmImage: ubuntu-latest
+  name: Default
 
 variables:
   - group: test-reporting   # holds the secret variable teamsWorkflowUrl
 
 steps:
   - checkout: self
+    clean: true
 
   - task: NodeTool@0
     displayName: Use Node 22
     inputs:
       versionSpec: '22.x'
 
-  - script: sleep 45
+  - powershell: Start-Sleep -Seconds 45
     displayName: Wait briefly so the other project's push can land
 
-  - script: |
+  - powershell: |
       # Read the newest results, which may include the other project's push. The repo is public, so no sign-in is needed.
       git fetch --depth 1 https://github.com/SATHEESH715/result-repo.git main
+      if ($LASTEXITCODE -ne 0) { exit 1 }
       git checkout -q FETCH_HEAD
+      if ($LASTEXITCODE -ne 0) { exit 1 }
       node scripts/post-report.mjs .
+      if ($LASTEXITCODE -ne 0) { exit 1 }
+    errorActionPreference: continue   # git writes progress to stderr, which must not stop the step
     displayName: Post one report to Teams (from result-repo)
     env:
       TEAMS_WORKFLOW_URL: $(teamsWorkflowUrl)

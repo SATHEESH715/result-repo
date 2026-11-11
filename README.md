@@ -33,7 +33,7 @@ Both approaches start the same way. After the tests, each project repo publishes
    - In Project settings, open Service connections and create an **Azure Resource Manager** connection named `azure-test-reporting`. Use workload identity federation (automatic) and scope it to the resource group `test-reporting-rg`.
    - In the Azure portal, give the identity this connection created the role **Storage Blob Data Reader** on the storage account `testreportsatheesh01`.
 4. **Approach 2 pipeline.** Create a second pipeline from `/azure-pipelines-blob.yml` the same way, allow the variable group and the service connection, and run it once by hand.
-5. **Free Microsoft-hosted agents.** A new Azure DevOps organisation may have no free hosted pipeline time yet. If a run waits for an agent, request free parallelism, or use a self-hosted agent.
+5. **Agents.** The pipelines use `pool: name: Default`, a self-hosted Windows agent. Install it from Organization settings, Agent pools, Default, New agent, and keep `run.cmd` running. To use Microsoft-hosted agents instead, once the free grant is approved, change the pool to `vmImage: ubuntu-latest` and turn the PowerShell steps back into bash.
 
 ## Checking it
 - Push a change in `project1` or `project2`. Its workflow publishes a result file here and to blob storage.
