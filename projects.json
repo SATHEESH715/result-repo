@@ -3,7 +3,7 @@
   { "folder": "allocations", "repo": "allocations", "name": "Allocations" },
   { "folder": "analysis", "repo": "analysis", "name": "Analysis" },
   { "folder": "customers", "repo": "customers", "name": "Customers" },
-  { "folder": "homeswapper", "repo": "homeswapper", "name": "HomeSwapper&SwapTracker&TenancyAnalytics" },
+  { "folder": "homeswapper", "repo": "homeswapper", "name": "HomeSwapper&Tenancy" },
   { "folder": "homelessnesssolutions", "repo": "homelessness-solutions", "name": "HomelessnessSolutions" },
   { "folder": "roughsleepers", "repo": "rough-sleepers", "name": "RoughSleepers" },
   { "folder": "servicecharges", "repo": "service-charges", "name": "ServiceCharges" }
