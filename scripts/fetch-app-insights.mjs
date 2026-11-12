@@ -16,7 +16,7 @@ const query = `customEvents
 | extend folder = tostring(customDimensions.folder)
 | summarize arg_max(timestamp, customDimensions, customMeasurements) by folder
 | project folder, timestamp,
-    projectName = tostring(customDimensions.project),
+    projectName = tostring(customDimensions["project"]),
     runUrl = tostring(customDimensions.runUrl),
     jobStatus = tostring(customDimensions.jobStatus),
     dotnetTotal = toint(customMeasurements.dotnetTotal), dotnetFailed = toint(customMeasurements.dotnetFailed),
