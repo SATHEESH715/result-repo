@@ -1,0 +1,17 @@
+{
+  "project": "Allocations",
+  "folder": "allocations",
+  "repo": "SATHEESH715/allocations",
+  "commit": "addddd4822c25b8728f6c9e3802f6a3e14d837d0",
+  "branch": "main",
+  "actor": "SATHEESH715",
+  "runUrl": "https://github.com/SATHEESH715/allocations/actions/runs/43163974851",
+  "runDate": "2026-11-12T05:51:04Z",
+  "jobStatus": "success",
+  "levels": {
+    "dotnet":     { "total": 3, "failed": 0 },
+    "angular":    { "total": 2, "failed": 0 },
+    "bruno":      { "total": 5, "failed": 0 },
+    "playwright": { "total": 3, "failed": 0 }
+  }
+}
