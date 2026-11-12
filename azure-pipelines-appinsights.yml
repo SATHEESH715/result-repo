@@ -1,0 +1,49 @@
+# Approach 3: the report is built from the TestRun events that every stripe sends to Application Insights.
+# Application Insights cannot start a pipeline by itself, so this runs on a schedule and can be run by hand.
+trigger: none
+pr: none
+
+schedules:
+  - cron: '30 2 * * 1-5'
+    displayName: Weekdays 2.30AM (UTC)
+    branches:
+      include:
+        - main
+    always: true
+
+# Runs on the self-hosted agent in the Default pool (Windows). To use Microsoft-hosted agents instead,
+# once the free grant is approved, replace this with:  vmImage: ubuntu-latest
+pool:
+  name: Default
+
+variables:
+  - group: test-reporting          # holds teamsWorkflowUrl (secret) and appInsightsAppId
+  - name: azureServiceConnection
+    value: azure-test-reporting    # the name of your Azure service connection
+
+steps:
+  - checkout: self
+    clean: true
+
+  - task: NodeTool@0
+    displayName: Use Node 22
+    inputs:
+      versionSpec: '22.x'
+
+  - task: AzureCLI@2
+    displayName: Read the latest results from Application Insights
+    inputs:
+      azureSubscription: $(azureServiceConnection)
+      scriptType: ps
+      scriptLocation: inlineScript
+      inlineScript: |
+        $env:APPINSIGHTS_TOKEN = az account get-access-token --resource https://api.applicationinsights.io --query accessToken -o tsv
+        $env:APPINSIGHTS_APP_ID = "$(appInsightsAppId)"
+        node scripts/fetch-app-insights.mjs ai-results
+        if ($LASTEXITCODE -ne 0) { exit 1 }
+
+  - script: node scripts/post-report.mjs ai-results
+    displayName: Post one report to Teams (from Application Insights)
+    env:
+      TEAMS_WORKFLOW_URL: $(teamsWorkflowUrl)
+      SOURCE_LABEL: Application Insights

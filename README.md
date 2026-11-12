@@ -40,3 +40,17 @@ Both approaches start the same way. After the tests, each project repo publishes
 - Teams should show one table with a row per project. A project that has not reported shows `no results`, and one older than 72 hours shows `stale`.
 
 Run the script locally without posting: `DRY_RUN=1 node scripts/post-report.mjs <folder-with-project-folders>`.
+
+## Approach 3: Application Insights
+Each stripe also sends one `TestRun` event to Application Insights, in a third publish job that runs at the same time as the other two. The job skips itself until the stripe has the secret `APPINSIGHTS_CONNECTION_STRING`.
+
+`azure-pipelines-appinsights.yml` runs on a schedule (weekdays 02:30 UTC) or by hand. It asks Application Insights for the latest event of every stripe, writes each as a result file, and posts the same Teams table with the source line `Application Insights`.
+
+Set-up, one time:
+1. In the Azure portal, create an Application Insights resource, and copy its connection string and its Application ID (API Access).
+2. Add the connection string to every stripe repo with `setup\Set-AppInsightsSecret.ps1`.
+3. In the Azure DevOps variable group `test-reporting`, add a plain variable `appInsightsAppId` with the Application ID.
+4. Give the identity behind the `azure-test-reporting` service connection the role **Monitoring Reader** on the Application Insights resource.
+5. Create a third pipeline from `/azure-pipelines-appinsights.yml` and run it once by hand.
+
+Events take a few minutes to appear after a stripe finishes, so run a stripe pipeline first and wait before you run the report.
