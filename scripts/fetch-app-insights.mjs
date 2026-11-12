@@ -16,7 +16,7 @@ const query = `customEvents
 | extend folder = tostring(customDimensions.folder)
 | summarize arg_max(timestamp, customDimensions, customMeasurements) by folder
 | project folder, timestamp,
-    project = tostring(customDimensions.project),
+    projectName = tostring(customDimensions.project),
     runUrl = tostring(customDimensions.runUrl),
     jobStatus = tostring(customDimensions.jobStatus),
     dotnetTotal = toint(customMeasurements.dotnetTotal), dotnetFailed = toint(customMeasurements.dotnetFailed),
@@ -40,7 +40,7 @@ const level = (row, name) => ({ total: row[`${name}Total`] ?? 0, failed: row[`${
 for (const values of table.rows) {
   const row = Object.fromEntries(values.map((v, i) => [columns[i], v]));
   const summary = {
-    project: row.project,
+    project: row.projectName,
     folder: row.folder,
     runUrl: row.runUrl,
     runDate: row.timestamp,
