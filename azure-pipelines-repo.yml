@@ -7,8 +7,14 @@ trigger:
       - main
   paths:
     include:
-      - project1/*
-      - project2/*
+      - asb/*
+      - allocations/*
+      - analysis/*
+      - customers/*
+      - homeswapper/*
+      - homelessnesssolutions/*
+      - roughsleepers/*
+      - servicecharges/*
 
 pr: none
 

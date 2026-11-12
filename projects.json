@@ -1,4 +1,10 @@
 [
-  { "folder": "project1", "name": "Project 1" },
-  { "folder": "project2", "name": "Project 2" }
+  { "folder": "asb", "repo": "asb", "name": "ASB" },
+  { "folder": "allocations", "repo": "allocations", "name": "Allocations" },
+  { "folder": "analysis", "repo": "analysis", "name": "Analysis" },
+  { "folder": "customers", "repo": "customers", "name": "Customers" },
+  { "folder": "homeswapper", "repo": "homeswapper", "name": "HomeSwapper&SwapTracker&TenancyAnalytics" },
+  { "folder": "homelessnesssolutions", "repo": "homelessness-solutions", "name": "HomelessnessSolutions" },
+  { "folder": "roughsleepers", "repo": "rough-sleepers", "name": "RoughSleepers" },
+  { "folder": "servicecharges", "repo": "service-charges", "name": "ServiceCharges" }
 ]

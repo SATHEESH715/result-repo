@@ -3,9 +3,8 @@
 Holds the latest test result of each project, and the pipelines that turn them into one Teams report.
 
 ```
-project1/summary.json   <- pushed by the project1 repo after every run
-project2/summary.json   <- pushed by the project2 repo after every run
-projects.json           <- the projects the report expects (a missing one shows as "no results")
+<stripe>/summary.json    <- pushed by each stripe repo after every run
+projects.json           <- the 8 stripes the report expects (a missing one shows as "no results")
 scripts/post-report.mjs <- builds the table and posts it to Teams
 azure-pipelines-repo.yml  Approach 1: report built from the files in this repo
 azure-pipelines-blob.yml  Approach 2: report built from the files in blob storage
