@@ -1,0 +1,17 @@
+{
+  "project": "RoughSleepers",
+  "folder": "roughsleepers",
+  "repo": "SATHEESH715/rough-sleepers",
+  "commit": "223d5d7d67da615454b507216cd6f1b40fefc6b6",
+  "branch": "main",
+  "actor": "SATHEESH715",
+  "runUrl": "https://github.com/SATHEESH715/rough-sleepers/actions/runs/43163998563",
+  "runDate": "2026-11-12T05:51:13Z",
+  "jobStatus": "success",
+  "levels": {
+    "dotnet":     { "total": 3, "failed": 0 },
+    "angular":    { "total": 2, "failed": 0 },
+    "bruno":      { "total": 5, "failed": 0 },
+    "playwright": { "total": 3, "failed": 0 }
+  }
+}
