@@ -1,0 +1,17 @@
+{
+  "project": "HomeSwapper&SwapTracker&TenancyAnalytics",
+  "folder": "homeswapper",
+  "repo": "SATHEESH715/homeswapper",
+  "commit": "4ed93e49784a9038f83c946ed120007cc4e583b3",
+  "branch": "main",
+  "actor": "SATHEESH715",
+  "runUrl": "https://github.com/SATHEESH715/homeswapper/actions/runs/43163988451",
+  "runDate": "2026-11-12T05:51:21Z",
+  "jobStatus": "success",
+  "levels": {
+    "dotnet":     { "total": 3, "failed": 0 },
+    "angular":    { "total": 2, "failed": 0 },
+    "bruno":      { "total": 5, "failed": 0 },
+    "playwright": { "total": 3, "failed": 0 }
+  }
+}
