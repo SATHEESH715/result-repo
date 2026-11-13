@@ -2,16 +2,16 @@
   "project": "HomelessnessSolutions",
   "folder": "homelessnesssolutions",
   "repo": "SATHEESH715/homelessness-solutions",
-  "commit": "a5e29cb391054bc3294724d2305961c779e5a70c",
+  "commit": "a2267a37e7c31ca0456c6ecc0c6aaebb257fc55c",
   "branch": "main",
   "actor": "SATHEESH715",
-  "runUrl": "https://github.com/SATHEESH715/homelessness-solutions/actions/runs/43208167174",
-  "runDate": "2026-11-12T11:20:43Z",
+  "runUrl": "https://github.com/SATHEESH715/homelessness-solutions/actions/runs/43356391045",
+  "runDate": "2026-11-13T03:05:27Z",
   "jobStatus": "success",
   "levels": {
     "dotnet":     { "total": 42, "failed": 0 },
     "angular":    { "total": 38, "failed": 0 },
     "bruno":      { "total": 44, "failed": 0 },
-    "playwright": { "total": 47, "failed": 0 }
+    "playwright": { "total": 47, "failed": 6 }
   }
 }
