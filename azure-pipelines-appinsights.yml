@@ -1,6 +1,21 @@
 # Approach 3: the report is built from the TestRun events that every stripe sends to Application Insights.
-# Application Insights cannot start a pipeline by itself, so this runs on a schedule and can be run by hand.
-trigger: none
+# Application Insights cannot start a pipeline by itself. This starts when a stripe pushes its result file to result-repo,
+# which happens at the same time as the event is sent. It also runs on a schedule and can be run by hand.
+trigger:
+  batch: true            # if several stripes push close together, build one report, not several
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - asb/*
+      - allocations/*
+      - analysis/*
+      - customers/*
+      - homeswapper/*
+      - homelessnesssolutions/*
+      - roughsleepers/*
+      - servicecharges/*
 pr: none
 
 schedules:
@@ -29,6 +44,9 @@ steps:
     displayName: Use Node 22
     inputs:
       versionSpec: '22.x'
+
+  - powershell: Start-Sleep -Seconds 300
+    displayName: Wait so the events become searchable
 
   - task: AzureCLI@2
     displayName: Read the latest results from Application Insights

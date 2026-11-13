@@ -1,6 +1,21 @@
 # Approach 2: the report is built from the result files that the project repos upload to blob storage.
-# Blob storage cannot start a pipeline by itself, so this runs on a schedule and can be run by hand.
-trigger: none
+# Blob storage cannot start a pipeline by itself. This starts when a stripe pushes its result file to result-repo,
+# which happens at the same time as the blob upload. It also runs on a schedule and can be run by hand.
+trigger:
+  batch: true            # if several stripes push close together, build one report, not several
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - asb/*
+      - allocations/*
+      - analysis/*
+      - customers/*
+      - homeswapper/*
+      - homelessnesssolutions/*
+      - roughsleepers/*
+      - servicecharges/*
 pr: none
 
 schedules:
@@ -33,6 +48,9 @@ steps:
     displayName: Use Node 22
     inputs:
       versionSpec: '22.x'
+
+  - powershell: Start-Sleep -Seconds 90
+    displayName: Wait so the blob uploads can finish
 
   - task: AzureCLI@2
     displayName: Download the result files from blob storage
